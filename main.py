@@ -31,7 +31,7 @@ ventana = tk.Tk()
 ventana.title("Interfaz Restaurante")
 ventana.geometry("400x400")
 
-imagen_original = Image.open("logo.jpeg")
+imagen_original = Image.open("img/logo.jpeg")
 imagen_redimensionada = imagen_original.resize((50, 50), Image.LANCZOS)
 logo = ImageTk.PhotoImage(imagen_redimensionada)
 
@@ -46,7 +46,6 @@ barra_carga.pack(pady=20)
 
 logo_label.image = logo
 
-# Iniciar la barra de carga solo si la conexión es exitosa
 iniciar_carga_si_conexion_exitosa()
 
 ventana.mainloop()
