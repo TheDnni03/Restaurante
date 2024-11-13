@@ -18,14 +18,6 @@ def obtener_lista_meseros():
         print(f"Error al obtener la lista de meseros: {e}")
         return []
 
-def registrar_inicio_sesion(conexion, usuario):
-    try:
-        with conexion.cursor() as cursor:
-            cursor.execute("CALL registrar_inicio_sesion(%s, %s)", (usuario, "Inicio de sesión exitoso"))
-            conexion.commit()
-    except Exception as e:
-        print(f"Error al registrar el inicio de sesión: {e}")
-
 def actualizar_barra():
     progreso = 0
     incremento = 100 / (10 * 10)
@@ -48,7 +40,7 @@ def iniciar_carga_si_conexion_exitosa():
     try:
         conexion = conectar_bd()
         if conexion:
-            registrar_inicio_sesion(conexion, usuario_seleccionado)
+            print(f"Conexión exitosa con el mesero {usuario_seleccionado}")
             actualizar_barra()
         else:
             messagebox.showerror("Error de Conexión", "No se pudo conectar a la base de datos.")
