@@ -1,27 +1,40 @@
 import tkinter as tk
-from tkinter import scrolledtext
 from EjecutarQuery import ejecutar_consulta
-import InsertarPedido
 
 def mostrar_pedidos():
-    resultados = ejecutar_consulta("SELECT * FROM Pedidos")
+    resultados = ejecutar_consulta("SELECT * FROM Pedido")
     mostrar_resultados(resultados)
 
 def mostrar_entregados():
-    resultados = ejecutar_consulta("SELECT * FROM Pedidos WHERE estado = 'entregado'")
+    resultados = ejecutar_consulta("SELECT * FROM Pedido WHERE estado = 'entregado'")
     mostrar_resultados(resultados)
 
 def mostrar_activos():
-    resultados = ejecutar_consulta("SELECT * FROM Pedidos WHERE estado = 'activo'")
+    resultados = ejecutar_consulta("SELECT * FROM Pedido WHERE estado = 'activo'")
     mostrar_resultados(resultados)
 
 def mostrar_resultados(resultados):
-    cuadro_texto.delete('1.0', tk.END)
+    # Limpiamos el contenedor de pedidos
+    for widget in contenedor_pedidos.winfo_children():
+        widget.destroy()
+    
     if resultados:
         for fila in resultados:
-            cuadro_texto.insert(tk.END, f"{fila}\n")
+            # Excluir el ID y formatear el tiempo para incluir segundos
+            fecha, estado, pago, total, id_mesero, id_cliente = fila[1:]
+            fecha_formateada = fecha.strftime('%Y-%m-%d %H:%M:%S')
+            
+            # Crear un recuadro (Frame) para cada pedido
+            recuadro_pedido = tk.Frame(contenedor_pedidos, bd=1, relief="solid", padx=5, pady=5)
+            recuadro_pedido.pack(fill="x", pady=5, padx=5)
+
+            # Crear etiquetas dentro del recuadro para cada campo
+            texto_pedido = f"Fecha: {fecha_formateada} | Estado: {estado} | Pago: {pago} | Total: {total} | Mesero ID: {id_mesero} | Cliente ID: {id_cliente}"
+            etiqueta_pedido = tk.Label(recuadro_pedido, text=texto_pedido, anchor="w")
+            etiqueta_pedido.pack(fill="x")
     else:
-        cuadro_texto.insert(tk.END, "No se encontraron resultados.\n")
+        etiqueta_no_resultados = tk.Label(contenedor_pedidos, text="No se encontraron resultados.", anchor="w")
+        etiqueta_no_resultados.pack(fill="x", pady=5)
 
 def salir():
     ventana.destroy()
@@ -29,6 +42,7 @@ def salir():
 ventana = tk.Tk()
 ventana.title("Gestión de Pedidos")
 
+# Sección de botones
 frame_botones = tk.Frame(ventana)
 frame_botones.pack(side=tk.TOP, fill=tk.X)
 
@@ -41,14 +55,11 @@ boton_entregados.pack(side=tk.LEFT, padx=5, pady=5)
 boton_activos = tk.Button(frame_botones, text="Activos", command=mostrar_activos)
 boton_activos.pack(side=tk.LEFT, padx=5, pady=5)
 
-# Agregar botón "Agregar" para abrir InsertarPedido.py
-boton_agregar = tk.Button(frame_botones, text="Agregar", command=InsertarPedido.insertar_pedido)
-boton_agregar.pack(side=tk.LEFT, padx=5, pady=5)
-
 boton_salir = tk.Button(frame_botones, text="Salir", command=salir)
 boton_salir.pack(side=tk.LEFT, padx=5, pady=5)
 
-cuadro_texto = scrolledtext.ScrolledText(ventana, wrap=tk.WORD, width=50, height=20)
-cuadro_texto.pack(padx=10, pady=10)
+# Contenedor para los pedidos
+contenedor_pedidos = tk.Frame(ventana)
+contenedor_pedidos.pack(fill="both", expand=True, padx=10, pady=10)
 
 ventana.mainloop()
