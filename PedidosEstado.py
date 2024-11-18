@@ -14,21 +14,17 @@ def mostrar_activos():
     mostrar_resultados(resultados)
 
 def mostrar_resultados(resultados):
-    # Limpiamos el contenedor de pedidos
     for widget in contenedor_pedidos.winfo_children():
         widget.destroy()
     
     if resultados:
         for fila in resultados:
-            # Excluir el ID y formatear el tiempo para incluir segundos
             fecha, estado, pago, total, id_mesero, id_cliente = fila[1:]
             fecha_formateada = fecha.strftime('%Y-%m-%d %H:%M:%S')
             
-            # Crear un recuadro (Frame) para cada pedido
             recuadro_pedido = tk.Frame(contenedor_pedidos, bd=1, relief="solid", padx=5, pady=5)
             recuadro_pedido.pack(fill="x", pady=5, padx=5)
 
-            # Crear etiquetas dentro del recuadro para cada campo
             texto_pedido = f"Fecha: {fecha_formateada} | Estado: {estado} | Pago: {pago} | Total: {total} | Mesero ID: {id_mesero} | Cliente ID: {id_cliente}"
             etiqueta_pedido = tk.Label(recuadro_pedido, text=texto_pedido, anchor="w")
             etiqueta_pedido.pack(fill="x")

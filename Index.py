@@ -1,18 +1,15 @@
 import tkinter as tk
-from Mesas import abrir_vista_restaurante  # Importar la función desde Mesas.py
-from Carga import abrir_carga_mesero  # Importar la función desde Carga.py
+from Mesas import abrir_vista_restaurante
+from Carga import abrir_carga_mesero
 
 def crear_interfaz():
-    # Crear la ventana principal
     ventana = tk.Tk()
     ventana.title("Restaurante")
-    ventana.attributes('-fullscreen', True)  # Pantalla completa
-    ventana.configure(bg="#f0f0f0")  # Fondo claro
+    ventana.attributes('-fullscreen', True)
+    ventana.configure(bg="#f0f0f0")
 
-    # Salir de la pantalla completa con la tecla ESC
     ventana.bind("<Escape>", lambda event: ventana.attributes('-fullscreen', False))
 
-    # Texto principal centrado
     titulo = tk.Label(
         ventana,
         text="Restaurante 'Nombre'",
@@ -20,13 +17,11 @@ def crear_interfaz():
         bg="#f0f0f0",
         fg="#333"
     )
-    titulo.place(relx=0.5, rely=0.3, anchor="center")  # Centrado vertical y horizontal
+    titulo.place(relx=0.5, rely=0.3, anchor="center")
 
-    # Crear el marco para los botones principales
     contenedor_botones = tk.Frame(ventana, bg="#f0f0f0")
     contenedor_botones.place(relx=0.5, rely=0.5, anchor="center")
 
-    # Botón 1: Mesero
     boton_mesero = tk.Button(
         contenedor_botones,
         text="Mesero",
@@ -35,11 +30,10 @@ def crear_interfaz():
         fg="white",
         width=20,
         height=2,
-        command=abrir_carga_mesero  # Llama a la función en Carga.py
+        command=abrir_carga_mesero
     )
-    boton_mesero.pack(pady=10)  # Añadir margen vertical entre botones
+    boton_mesero.pack(pady=10)
 
-    # Botón 2: Encargado
     boton_encargado = tk.Button(
         contenedor_botones,
         text="Encargado",
@@ -52,7 +46,6 @@ def crear_interfaz():
     )
     boton_encargado.pack(pady=10)
 
-    # Botón 3: Vista del Restaurante
     boton_vista = tk.Button(
         contenedor_botones,
         text="Vista del Restaurante",
@@ -61,11 +54,10 @@ def crear_interfaz():
         fg="white",
         width=20,
         height=2,
-        command=abrir_vista_restaurante  # Llama a la función en Mesas.py
+        command=abrir_vista_restaurante
     )
     boton_vista.pack(pady=10)
 
-    # Botón para cerrar la ventana principal
     boton_cerrar = tk.Button(
         ventana,
         text="Cerrar",
@@ -74,12 +66,11 @@ def crear_interfaz():
         fg="white",
         width=10,
         height=2,
-        command=ventana.destroy  # Cierra la ventana
+        command=ventana.destroy
     )
-    boton_cerrar.place(relx=0.95, rely=0.95, anchor="se")  # Colocar en la esquina inferior derecha
+    boton_cerrar.place(relx=0.95, rely=0.95, anchor="se")
 
     ventana.mainloop()
 
-# Ejecutar la interfaz principal
 if __name__ == "__main__":
     crear_interfaz()

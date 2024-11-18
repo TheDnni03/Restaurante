@@ -6,7 +6,6 @@ def insertar_orden():
     ventana = tk.Tk()
     ventana.title("Insertar Nueva Orden")
 
-    # 1. Sección para insertar cliente
     tk.Label(ventana, text="Nombre del Cliente:").grid(row=0, column=0, padx=10, pady=5)
     entrada_nombre = tk.Entry(ventana)
     entrada_nombre.grid(row=0, column=1, padx=10, pady=5)
@@ -19,12 +18,11 @@ def insertar_orden():
     entrada_email = tk.Entry(ventana)
     entrada_email.grid(row=2, column=1, padx=10, pady=5)
 
-    # Función para insertar cliente
     def crear_cliente():
         nombre = entrada_nombre.get()
         apellidos = entrada_apellidos.get()
         email = entrada_email.get()
-        fecha_registro = datetime.now().strftime("%Y-%m-%d")  # Fecha actual
+        fecha_registro = datetime.now().strftime("%Y-%m-%d")
         id_cuenta = 28
         id_mesa = 1
 
@@ -37,7 +35,7 @@ def insertar_orden():
 
         if resultado:
             global id_cliente_creado
-            id_cliente_creado = resultado[0][0]  # Almacena el Id_Cliente creado
+            id_cliente_creado = resultado[0][0]
             tk.Label(ventana, text=f"Cliente creado con ID: {id_cliente_creado}", fg="green").grid(row=4, column=0, columnspan=2, pady=10)
             boton_insertar_producto.config(state=tk.NORMAL)
         else:
@@ -46,8 +44,6 @@ def insertar_orden():
     boton_crear_cliente = tk.Button(ventana, text="Crear Cliente", command=crear_cliente)
     boton_crear_cliente.grid(row=3, column=0, columnspan=2, pady=10)
 
-    # 2. Sección para insertar productos en el pedido
-    # Obtener productos desde la base de datos
     def obtener_productos():
         query_productos = "SELECT Id_Productos, Producto FROM Productos"
         productos = ejecutar_consulta(query_productos, ())
@@ -57,7 +53,7 @@ def insertar_orden():
     if productos:
         productos_lista = [f"{producto[1]} (ID: {producto[0]})" for producto in productos]
         id_producto_var = tk.StringVar(ventana)
-        id_producto_var.set(productos_lista[0])  # Producto predeterminado
+        id_producto_var.set(productos_lista[0])
 
         tk.Label(ventana, text="Selecciona Producto:").grid(row=5, column=0, padx=10, pady=5)
         menu_productos = tk.OptionMenu(ventana, id_producto_var, *productos_lista)
@@ -67,10 +63,8 @@ def insertar_orden():
     entrada_cantidad = tk.Entry(ventana)
     entrada_cantidad.grid(row=6, column=1, padx=10, pady=5)
 
-    # Lista para almacenar productos del pedido
     productos_pedido = []
 
-    # Función para agregar productos a la lista del pedido
     def agregar_producto():
         seleccion = id_producto_var.get()
         id_producto = seleccion.split("(ID: ")[1].replace(")", "")
@@ -86,20 +80,17 @@ def insertar_orden():
     boton_insertar_producto = tk.Button(ventana, text="Agregar Producto", command=agregar_producto, state=tk.DISABLED)
     boton_insertar_producto.grid(row=7, column=0, columnspan=2, pady=10)
 
-    # 3. Sección para crear el pedido
     tk.Label(ventana, text="Monto Total:").grid(row=9, column=0, padx=10, pady=5)
     entrada_monto_total = tk.Entry(ventana)
     entrada_monto_total.grid(row=9, column=1, padx=10, pady=5)
 
-    # Función para crear el pedido y asociar productos
     def crear_pedido():
-        fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Fecha actual
+        fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         estado = "Activo"
         metodo_pago = "Efectivo"  # Por defecto
         monto_total = entrada_monto_total.get()
         id_cliente = id_cliente_creado
 
-        # Inserta el pedido
         query_pedido = "SELECT CrearPedido(%s, %s, %s, %s, %s)"
         parametros_pedido = (fecha, estado, metodo_pago, monto_total, id_cliente)
         resultado_pedido = ejecutar_consulta(query_pedido, parametros_pedido)
@@ -108,7 +99,6 @@ def insertar_orden():
             id_pedido_creado = resultado_pedido[0][0]
             tk.Label(ventana, text=f"Pedido creado con ID: {id_pedido_creado}", fg="green").grid(row=11, column=0, columnspan=2, pady=10)
 
-            # Insertar cada producto en el pedido
             for id_producto, cantidad in productos_pedido:
                 query_agregar_producto = "SELECT AgregarProductoAPedido(%s, %s, %s)"
                 parametros_producto = (id_pedido_creado, id_producto, cantidad)
@@ -123,6 +113,5 @@ def insertar_orden():
 
     ventana.mainloop()
 
-# Ejecuta la ventana de insertar orden solo si se ejecuta directamente
 if __name__ == "__main__":
     insertar_orden()

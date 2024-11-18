@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from PIL import Image, ImageTk
 from conexion import conectar_bd
+from InsertarPedido import insertar_orden
 
 def obtener_lista_meseros():
     try:
@@ -30,6 +31,7 @@ def actualizar_barra(ventana, barra_carga):
             ventana.after(100, incrementar)
         else:
             ventana.destroy()
+            insertar_orden()
     incrementar()
 
 def iniciar_carga_si_conexion_exitosa(ventana, combobox_meseros, barra_carga):
@@ -49,7 +51,7 @@ def iniciar_carga_si_conexion_exitosa(ventana, combobox_meseros, barra_carga):
         messagebox.showerror("Error de Conexión", f"Error al conectar a la base de datos: {e}")
 
 def abrir_carga_mesero():
-    ventana = tk.Toplevel()  # Cambiar a Toplevel para no cerrar la ventana principal
+    ventana = tk.Toplevel()
     ventana.title("Interfaz Restaurante")
     ventana.geometry("400x400")
 
