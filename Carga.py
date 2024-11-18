@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from PIL import Image, ImageTk
 from conexion import conectar_bd
-from InsertarPedido import insertar_orden
+from InsertarPedido import insertar_orden  # Importar la función de InsertarPedido
 
 def obtener_lista_meseros():
     try:
@@ -30,8 +30,8 @@ def actualizar_barra(ventana, barra_carga):
         if progreso < 100:
             ventana.after(100, incrementar)
         else:
-            ventana.destroy()
-            insertar_orden()
+            ventana.destroy()  # Cierra la ventana de carga
+            insertar_orden()  # Llama a la interfaz de Insertar Pedido
     incrementar()
 
 def iniciar_carga_si_conexion_exitosa(ventana, combobox_meseros, barra_carga):
@@ -50,37 +50,42 @@ def iniciar_carga_si_conexion_exitosa(ventana, combobox_meseros, barra_carga):
     except Exception as e:
         messagebox.showerror("Error de Conexión", f"Error al conectar a la base de datos: {e}")
 
-def abrir_carga_mesero():
-    ventana = tk.Toplevel()
+def abrir_carga_mesero(ventana_principal):
+    ventana_principal.destroy()  # Cierra la ventana principal
+
+    ventana = tk.Tk()  # Crear nueva ventana para carga
     ventana.title("Interfaz Restaurante")
-    ventana.geometry("400x400")
+    ventana.attributes('-fullscreen', True)  # Hacerla pantalla completa
 
     # Logo
     imagen_original = Image.open("img/logo.jpeg")
-    imagen_redimensionada = imagen_original.resize((50, 50), Image.LANCZOS)
+    imagen_redimensionada = imagen_original.resize((100, 100), Image.LANCZOS)  # Tamaño ajustado para pantalla completa
     logo = ImageTk.PhotoImage(imagen_redimensionada)
     logo_label = tk.Label(ventana, image=logo)
     logo_label.image = logo  # Mantener referencia a la imagen
-    logo_label.pack(pady=20)
+    logo_label.pack(pady=50)
 
     # Título
-    texto_label = tk.Label(ventana, text="Restaurante", font=("Arial", 24))
-    texto_label.pack()
+    texto_label = tk.Label(ventana, text="Restaurante", font=("Arial", 36))
+    texto_label.pack(pady=20)
 
     # Lista de meseros
     lista_meseros = obtener_lista_meseros()
-    combobox_meseros = ttk.Combobox(ventana, values=lista_meseros)
+    combobox_meseros = ttk.Combobox(ventana, values=lista_meseros, font=("Arial", 16))
     combobox_meseros.set("Seleccione un mesero")
-    combobox_meseros.pack(pady=10)
+    combobox_meseros.pack(pady=20)
 
     # Barra de carga
-    barra_carga = ttk.Progressbar(ventana, orient="horizontal", length=300, mode="determinate")
-    barra_carga.pack(pady=20)
+    barra_carga = ttk.Progressbar(ventana, orient="horizontal", length=500, mode="determinate")
+    barra_carga.pack(pady=40)
 
     # Botón para iniciar
     boton_iniciar = tk.Button(
         ventana,
         text="Iniciar",
+        font=("Arial", 18),
         command=lambda: iniciar_carga_si_conexion_exitosa(ventana, combobox_meseros, barra_carga)
     )
-    boton_iniciar.pack(pady=10)
+    boton_iniciar.pack(pady=30)
+
+    ventana.mainloop()

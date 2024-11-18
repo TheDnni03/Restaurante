@@ -30,7 +30,7 @@ def crear_interfaz():
         fg="white",
         width=20,
         height=2,
-        command=abrir_carga_mesero
+        command=lambda: abrir_carga_mesero(ventana)
     )
     boton_mesero.pack(pady=10)
 
@@ -54,7 +54,7 @@ def crear_interfaz():
         fg="white",
         width=20,
         height=2,
-        command=abrir_vista_restaurante
+        command=lambda: print("Vista del Restaurante seleccionada")
     )
     boton_vista.pack(pady=10)
 
@@ -69,7 +69,6 @@ def crear_interfaz():
         command=ventana.destroy
     )
     boton_cerrar.place(relx=0.95, rely=0.95, anchor="se")
-
     ventana.mainloop()
 
 if __name__ == "__main__":
