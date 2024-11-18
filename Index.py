@@ -1,5 +1,6 @@
 import tkinter as tk
 from Mesas import abrir_vista_restaurante  # Importar la función desde Mesas.py
+from Carga import abrir_carga_mesero  # Importar la función desde Carga.py
 
 def crear_interfaz():
     # Crear la ventana principal
@@ -34,7 +35,7 @@ def crear_interfaz():
         fg="white",
         width=20,
         height=2,
-        command=lambda: print("Mesero seleccionado")
+        command=abrir_carga_mesero  # Llama a la función en Carga.py
     )
     boton_mesero.pack(pady=10)  # Añadir margen vertical entre botones
 
